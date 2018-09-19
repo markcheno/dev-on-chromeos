@@ -7,4 +7,4 @@ then
 fi
 
 apt-get update
-apt-get install -y libasound2 libxss1 code
+apt-get install -y code

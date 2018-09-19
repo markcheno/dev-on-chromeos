@@ -1,3 +1,5 @@
+NOTE: Currently broken... Work in progress
+
 Setup development tool on Chrome OS Terminal (aka Crostini).
 
 These scripts setup all the tools I need:

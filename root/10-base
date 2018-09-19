@@ -18,5 +18,7 @@ apt-get install -y \
   nano \
   gnupg \
   libssl-dev \
-  iputils-ping
+  iputils-ping \
+  libasound2 \
+  libxss1
 
