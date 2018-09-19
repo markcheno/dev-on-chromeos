@@ -2,7 +2,6 @@
 
 apt-get install -y python3 python3-venv python3-pip
 
-
 cat <<EOF > /etc/profile.d/python-user-path.sh
 if [ -d "\$HOME/.local/bin" ] ; then
     PATH="\$HOME/.local/bin:\$PATH"

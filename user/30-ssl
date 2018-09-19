@@ -1,0 +1,43 @@
+# Setup Crostini SSL
+# mail@tjpalanca.com
+
+# This generates the certificates (that you should trust in the browser) for the nginx proxy so that
+# the rstudio server, CUPS server, and Jupyter Lab can communicate with the container via HTTPS.
+
+# Should not run as root
+if [ "$(whoami)" == "root" ]; then
+  echo "Script should not be run as root, but as a user with root privileges"
+  exit -1
+fi
+
+mkdir ~/ssl 
+cd ~/ssl
+openssl genrsa -des3 -out penguin.linux.test.key 2048
+openssl req -x509 -new -nodes -key penguin.linux.test.key -sha256 -days 1024 -out penguin.linux.test.pem
+echo '
+[req]
+default_bits = 2048
+prompt = no
+default_md = sha256
+distinguished_name = dn
+
+[dn]
+C=PH
+ST=NCR
+L=Makati
+O=Crostini
+OU=Personal
+emailAddress=mail@tjpalanca.com
+CN = penguin.linux.test
+' > server.csr.cnf
+echo '
+authorityKeyIdentifier=keyid,issuer
+basicConstraints=CA:FALSE
+keyUsage = digitalSignature, nonRepudiation, keyEncipherment, dataEncipherment
+subjectAltName = @alt_names
+
+[alt_names]
+DNS.1 = penguin.linux.test
+' > v3.ext
+openssl req -new -sha256 -nodes -out server.csr -newkey rsa:2048 -keyout server.key -config <( cat server.csr.cnf )
+openssl x509 -req -in server.csr -CA penguin.linux.test.pem -CAkey penguin.linux.test.key -CAcreateserial -out server.crt -days 500 -sha256 -extfile v3.ext

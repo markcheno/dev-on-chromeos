@@ -15,4 +15,8 @@ apt-get install -y \
   unzip \
   wget \
   zip \
-  nano
+  nano \
+  gnupg \
+  libssl-dev \
+  iputils-ping
+
