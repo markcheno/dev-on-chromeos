@@ -3,14 +3,15 @@ NOTE: Currently broken... Work in progress
 Setup development tool on Chrome OS Terminal (aka Crostini).
 
 These scripts setup all the tools I need:
-- NodeJS for React/NextJS apps
-- Bash scripting (jq, httpie, dot)
-- VSCode for coding
-- python3, pip and pipenv
+- build essentials (gcc/make/etc..)
+- node/npx/yarn/create-react-app
+- Bash commands (jq, httpie, ping, nano)
+- VSCode
+- anaconda python3, pip and pipenv
 - golang
 - docker
-- Jupyter Lab server
-- RStudio server
+- Jupyter Lab server (datascience)
+- RStudio server (tidyverse/tidyquant)
 
 Known to work on:
 - Google PixelBook
