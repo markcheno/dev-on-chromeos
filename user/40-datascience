@@ -14,6 +14,17 @@ if [ "$(whoami)" == "root" ]; then
   echo "Script should not be run as root, but as a user with root privileges"
   exit -1
 fi
+
+# Install some basics
+cd ~/
+sudo apt-get update
+sudo apt-get -y install \
+  software-properties-common \
+  gnupg \
+  wget \
+  libssl-dev \
+  nano \
+  iputils-ping
   
 # Repositories update
 sudo apt-key adv --keyserver keys.gnupg.net --recv-key 'E19F5F87128899B192B1A2C2AD5F960A256A04AF'
@@ -31,6 +42,9 @@ wget https://download2.rstudio.org/rstudio-server-stretch-1.1.456-amd64.deb && \
   sudo gdebi --non-interactive rstudio-server-stretch-1.1.456-amd64.deb && \
   rm rstudio-server-stretch-1.1.456-amd64.deb
   
+# Set up password
+sudo passwd $USER
+
 # Linux R package dependencies
 sudo apt-get -y install \
   libxml2-dev \
@@ -41,15 +55,15 @@ sudo apt-get -y install \
   libssh2-1-dev 
 
 # Install CUPS Server
-sudo apt-get -y install cups
-sudo gpasswd -a $USER lpadmin
+#sudo apt-get -y install cups
+#sudo gpasswd -a $USER lpadmin
 
 # Install miniconda and jupyter lab as a service
 wget https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh
 bash Miniconda3-latest-Linux-x86_64.sh 
 source ~/.bashrc 
 rm Miniconda3-latest-Linux-x86_64.sh
-conda install -y jupyterlab
+conda install -y jupyterlab nodejs
 mkdir -p ~/.config/systemd/user/
 mkdir -p ~/jupyter/
 echo '
@@ -118,14 +132,14 @@ server {
     proxy_read_timeout 86400;
   } 
   # CUPS Server
-  location / {
-    proxy_pass http://localhost:631;
-    proxy_redirect http://localhost:631/ \$scheme://\$host/cups/;
-    proxy_http_version 1.1;
-    proxy_set_header Upgrade \$http_upgrade;
-    proxy_set_header Connection \$connection_upgrade;
-    proxy_read_timeout 20d;
-  }  
+  #location / {
+  #  proxy_pass http://localhost:631;
+  #  proxy_redirect http://localhost:631/ \$scheme://\$host/cups/;
+  #  proxy_http_version 1.1;
+  #  proxy_set_header Upgrade \$http_upgrade;
+  #  proxy_set_header Connection \$connection_upgrade;
+  #  proxy_read_timeout 20d;
+  #}  
 }" | sudo tee /etc/nginx/sites-available/default
 sudo systemctl restart nginx.service
 
@@ -136,7 +150,7 @@ Rscript -e " \
     pkgs = c('tidyverse', 'glue', 'devtools', 'rJava', 'tidyquant'), \
     repos = 'https://cran.rstudio.com', \
     lib = Sys.getenv('R_LIBS_USER') \
-  ); \
+  ); 
 "
 Rscript -e "devtools::install_github('IRkernel/IRkernel'); IRkernel::installspec()" 
 
@@ -144,6 +158,9 @@ Rscript -e "devtools::install_github('IRkernel/IRkernel'); IRkernel::installspec
 jupyter labextension install @jupyterlab/git
 
 # Permissions for ssh keys
-#chmod 700 /home/$USER/.ssh
-#chmod 700 /home/$USER/.ssh/id_rsa 
-#chmod 644 /home/$USER/.ssh/id_rsa.pub
+chmod 700 /home/$USER/.ssl
+chmod 700 /home/$USER/.ssl/server.crt
+chmod 644 /home/$USER/.ssl/server.key
+
+# Remove self
+#rm setup-crostini.sh

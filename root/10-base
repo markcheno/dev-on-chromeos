@@ -8,7 +8,6 @@ apt-get install -y \
   ca-certificates \
   curl \
   gettext \
-  git \
   httpie \
   jq \
   software-properties-common \

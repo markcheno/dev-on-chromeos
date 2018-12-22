@@ -13,3 +13,18 @@ fi
 apt-get install -y docker-ce
 groupadd -f docker
 usermod -aG docker $SUDO_USER
+
+# Add a new file with the ExecStartPre override:
+
+# sudo mkdir -p /etc/systemd/system/containerd.service.d
+# sudo nano /etc/systemd/system/containerd.service.d/override.conf
+# Contents of override.conf:
+
+# [Service]
+# ExecStartPre=
+
+# Reload the systemctl daemon:
+
+# $ sudo systemctl daemon-reload
+
+# Now you can start Docker successfully (sudo systemctl start docker).
