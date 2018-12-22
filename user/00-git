@@ -1,3 +1,4 @@
 #!/bin/bash
-
+git config --global user.name markcheno
+git config --global user.email mark@cheno.net
 git config --global credential.helper "cache --timeout=86400"

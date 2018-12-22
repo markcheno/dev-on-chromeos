@@ -1,0 +1,47 @@
+# server at: penguin.linux.test:8787
+
+# Should not run as root
+if [ "$(whoami)" == "root" ]; then
+  echo "Script should not be run as root, but as a user with root privileges"
+  exit -1
+fi
+
+# Repositories update
+sudo apt-key adv --keyserver keys.gnupg.net --recv-key 'E19F5F87128899B192B1A2C2AD5F960A256A04AF'
+sudo add-apt-repository 'deb [arch=amd64,i386] https://cran.rstudio.com/bin/linux/debian stretch-cran35/' -y
+sudo apt-get update
+
+# Install R 3.5.X and Rstudio server
+sudo apt-get -y install \
+  r-base \
+  r-base-dev \
+  libopenblas-base \
+  libapparmor1 \
+  gdebi-core
+wget https://download2.rstudio.org/rstudio-server-stretch-1.1.456-amd64.deb && \
+  sudo gdebi --non-interactive rstudio-server-stretch-1.1.456-amd64.deb && \
+  rm rstudio-server-stretch-1.1.456-amd64.deb
+  
+# Set up password
+sudo passwd $USER
+
+# Linux R package dependencies
+sudo apt-get -y install \
+  libxml2-dev \
+  libssl-dev \
+  libcurl4-openssl-dev \
+  libssh2-1-dev 
+
+
+# Install 'core' R packages 
+Rscript -e " \
+  dir.create(Sys.getenv('R_LIBS_USER'), recursive = TRUE); \
+  install.packages( \
+    pkgs = c('tidyverse', 'glue', 'devtools', 'tidyquant'), \
+    repos = 'https://cran.rstudio.com', \
+    lib = Sys.getenv('R_LIBS_USER') \
+  ); 
+"
+
+# R Kernel for Jupyter Lab
+#Rscript -e "devtools::install_github('IRkernel/IRkernel'); IRkernel::installspec()" 
