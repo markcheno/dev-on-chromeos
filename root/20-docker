@@ -1,7 +1,4 @@
 #!/bin/bash
-if ! apt-key fingerprint 0EBFCD88 | grep -q 0EBFCD88; then
-  curl -fsSL https://download.docker.com/linux/debian/gpg | apt-key add -
-fi
 
 if [[ ! -e /etc/apt/sources.list.d/docker.list ]]
 then
@@ -12,7 +9,7 @@ fi
 
 apt-get install -y docker-ce
 groupadd -f docker
-usermod -aG docker $SUDO_USER
+usermod -aG docker $USER
 
 # Add a new file with the ExecStartPre override:
 
@@ -28,3 +25,4 @@ usermod -aG docker $SUDO_USER
 # $ sudo systemctl daemon-reload
 
 # Now you can start Docker successfully (sudo systemctl start docker).
+# Be sure to logout and back in
