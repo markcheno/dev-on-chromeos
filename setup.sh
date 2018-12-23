@@ -14,7 +14,7 @@ for SETUP_SCRIPT in ls $DIR/user/??-*; do
   $SETUP_SCRIPT
 done
 
-mkdir -p $HOME/projects
+mkdir -p $HOME/git
 mkdir -p $HOME/temp
 
 echo "Logout and log back in to synchronize all the bits and bytes."

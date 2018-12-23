@@ -1,4 +1,4 @@
-NOTE: Currently broken... Work in progress
+NOTE: Work in progress
 
 Setup development tool on Chrome OS Terminal (aka Crostini).
 
@@ -10,7 +10,6 @@ These scripts setup all the tools I need:
 - anaconda python3, pip and pipenv
 - golang
 - docker
-- Jupyter Lab server (datascience)
 - RStudio server (tidyverse/tidyquant)
 
 Known to work on:
@@ -23,8 +22,6 @@ Requirements:
 Open the Terminal app, then
 
 ```bash
-sudo apt update
-sudo apt install git
 git clone https://github.com/ukabu/dev-on-chromeos.git
 cd dev-on-chromeos
 ./setup.sh
